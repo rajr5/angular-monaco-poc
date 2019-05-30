@@ -15,23 +15,22 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.partial.js",
+              "mergeStrategies": { "plugins": "append" }
+            },
             "outputPath": "dist/angular-monaco-test",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/monaco-editor/min",
-                "output": "./assets/monaco/"
-              }
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": [
+              "src/styles.scss",
+              "node_modules/monaco-editor/min/vs/editor/editor.main.css"
             ],
-            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -62,7 +61,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-devkit/build-angular:server",
           "options": {
             "browserTarget": "angular-monaco-test:build"
           },
