@@ -19,7 +19,7 @@
           "options": {
             "customWebpackConfig": {
               "path": "./webpack.partial.js",
-              "mergeStrategies": { "plugins": "append" }
+              "mergeStrategies": { "plugins": "prepend" }
             },
             "outputPath": "dist/angular-monaco-test",
             "index": "src/index.html",
@@ -61,7 +61,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "browserTarget": "angular-monaco-test:build"
           },

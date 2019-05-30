@@ -7,7 +7,8 @@ import {
   NgZone
 } from '@angular/core';
 
-import * as monaco from 'monaco-editor';
+// import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +16,10 @@ import * as monaco from 'monaco-editor';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('editorContainer') _editorContainer: ElementRef;
+  @ViewChild('editorContainer', { static: true }) _editorContainer: ElementRef;
   title = 'angular-monaco-test';
-  _editor: any;
-  options: any = {};
+  _editor: monaco.editor.IStandaloneCodeEditor;
+  options: monaco.editor.IEditorConstructionOptions = {};
   value = `
     let loadedMonaco = false;
     let loadPromise: Promise<void>;
@@ -44,12 +45,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   initMonaco() {
     console.log('initMonaco()');
     this.options.language = this.language;
-    this._editor = monaco.editor.create(
-      this._editorContainer.nativeElement,
-      this.options
-    );
+    if (!this._editor) {
+      console.log('creating new editor');
+      this._editor = monaco.editor.create(
+        this._editorContainer.nativeElement,
+        this.options
+      );
 
-    this._editor.setValue(this.value);
+      this._editor.setValue(this.value);
+    } else {
+      console.log('Updating language');
+      monaco.editor.setModelLanguage(this._editor.getModel(), this.language);
+    }
 
     this._editor.onDidChangeModelContent((e: any) => {
       this.value = this._editor.getValue();
